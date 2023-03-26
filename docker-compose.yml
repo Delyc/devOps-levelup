@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  #mongoDB service
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    ports: 
+      - 2717:27017
+    volumes: 
+      - mongo_db:/data/db
+
+
+  #node api servce
+
+  api:
+    build: .
+    ports:
+      - 4000:3001
+    volumes:
+      - .:/app
+    environment:
+      PORT: 3000
+      MONGODBURI: mongodb://mongo_db:27017
+      DB_NAME: my_db
+      NAME: delyc
+    depends_on:
+      - mongo_db
+
+
+volumes:
+  mongo_db: {}
